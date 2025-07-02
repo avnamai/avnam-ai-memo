@@ -19,23 +19,23 @@ Refactor the current Anthropic-only implementation to support multiple LLM provi
 
 ### Phase 1: Foundation Refactoring (Essential Prerequisites)
 
-- [ ] **001-1:** Refactor AnthropicProvider to extend LLMProvider base class
-  - [ ] Create `providers/anthropic-provider.js` that properly extends `LLMProvider`
-  - [ ] Implement all required methods: `initialize()`, `chat()`, `processMemo()`, `calculateTokens()`
-  - [ ] Move Anthropic-specific logic from `anthropic-api.js` to the new provider class
-  - [ ] Ensure browser compatibility and CSP compliance
+- [x] **001-1:** Refactor AnthropicProvider to extend LLMProvider base class
+  - [x] Create `providers/anthropic-provider.js` that properly extends `LLMProvider`
+  - [x] Implement all required methods: `initialize()`, `chat()`, `processMemo()`, `calculateTokens()`
+  - [x] Move Anthropic-specific logic from `anthropic-api.js` to the new provider class
+  - [x] Ensure browser compatibility and CSP compliance
 
-- [ ] **001-2:** Update background.js to use provider factory pattern
-  - [ ] Replace direct imports from `anthropic-api.js` with `LLMProviderFactory`
-  - [ ] Implement provider initialization logic in message handlers
-  - [ ] Update memo processing and chat handling to use provider interface
-  - [ ] Add error handling for provider initialization failures
+- [x] **001-2:** Update background.js to use provider factory pattern
+  - [x] Replace direct imports from `anthropic-api.js` with `LLMProviderFactory`
+  - [x] Implement provider initialization logic in message handlers
+  - [x] Update memo processing and chat handling to use provider interface
+  - [x] Add error handling for provider initialization failures
 
-- [ ] **001-3:** Create configuration management system
-  - [ ] Design storage schema for multi-provider configurations
-  - [ ] Implement functions to get/set current provider and API keys
-  - [ ] Add provider validation and initialization logic
-  - [ ] Create migration function for existing Anthropic API keys
+- [x] **001-3:** Create configuration management system
+  - [x] Design storage schema for multi-provider configurations
+  - [x] Implement functions to get/set current provider and API keys
+  - [x] Add provider validation and initialization logic
+  - [x] Create migration function for existing Anthropic API keys
 
 ### Phase 2: Provider Implementations
 

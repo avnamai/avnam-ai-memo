@@ -1,4 +1,4 @@
-import { AnthropicProvider } from './anthropic-api.js';
+import { AnthropicProvider } from './providers/anthropic-provider.js';
 
 // Factory class for creating LLM provider instances
 export class LLMProviderFactory {
@@ -19,7 +19,11 @@ export class LLMProviderFactory {
                 name: 'Anthropic Claude',
                 description: 'Claude AI by Anthropic',
                 requiresApiKey: true,
-                models: ['claude-3-5-sonnet-20241022']
+                models: [
+                    'claude-3-5-sonnet-20241022',
+                    'claude-3-haiku-20240307',
+                    'claude-3-opus-20240229'
+                ]
             }
         ];
     }
