@@ -45,6 +45,9 @@ const saveChatButton = document.getElementById('saveChatButton');
 // Add current filter state
 let currentTagFilter = null;
 
+// Initialize provider configuration manager
+let providerConfigManager;
+
 // Handle sending a message
 async function sendMessage() {
     const input = document.getElementById('chatInput');
@@ -252,7 +255,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     // Initialize provider configuration manager
-    const providerConfigManager = new ProviderConfigManager();
+    providerConfigManager = new ProviderConfigManager();
 
     // Initialize provider settings
     await initializeProviderSettings();
