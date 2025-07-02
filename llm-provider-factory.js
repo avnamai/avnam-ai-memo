@@ -1,4 +1,7 @@
 import { AnthropicProvider } from './providers/anthropic-provider.js';
+import { OpenAIProvider } from './providers/openai-provider.js';
+import { BedrockProvider } from './providers/bedrock-provider.js';
+import { GeminiProvider } from './providers/gemini-provider.js';
 
 // Factory class for creating LLM provider instances
 export class LLMProviderFactory {
@@ -6,6 +9,12 @@ export class LLMProviderFactory {
         switch (type) {
             case 'anthropic':
                 return new AnthropicProvider(config);
+            case 'openai':
+                return new OpenAIProvider(config);
+            case 'bedrock':
+                return new BedrockProvider(config);
+            case 'gemini':
+                return new GeminiProvider(config);
             default:
                 throw new Error(`Provider type '${type}' not implemented yet`);
         }
@@ -24,6 +33,50 @@ export class LLMProviderFactory {
                     'claude-3-haiku-20240307',
                     'claude-3-opus-20240229'
                 ]
+            },
+            {
+                id: 'openai',
+                name: 'OpenAI',
+                description: 'GPT models by OpenAI',
+                requiresApiKey: true,
+                models: [
+                    'gpt-4',
+                    'gpt-4-turbo-preview',
+                    'gpt-3.5-turbo',
+                    'gpt-3.5-turbo-16k'
+                ]
+            },
+            {
+                id: 'bedrock',
+                name: 'AWS Bedrock',
+                description: 'Claude models via AWS Bedrock',
+                requiresApiKey: true,
+                requiresAwsCredentials: true,
+                models: [
+                    'anthropic.claude-3-5-sonnet-20241022-v2:0',
+                    'anthropic.claude-3-sonnet-20240229-v1:0',
+                    'anthropic.claude-3-haiku-20240307-v1:0',
+                    'anthropic.claude-3-opus-20240229-v1:0'
+                ],
+                regions: [
+                    'us-east-1',
+                    'us-west-2',
+                    'eu-west-1',
+                    'eu-central-1'
+                ]
+            },
+            {
+                id: 'gemini',
+                name: 'Google Gemini',
+                description: 'Gemini AI models by Google',
+                requiresApiKey: true,
+                models: [
+                    'gemini-pro',
+                    'gemini-pro-vision',
+                    'gemini-1.5-pro',
+                    'gemini-1.5-flash'
+                ],
+                supportsVision: true
             }
         ];
     }
@@ -34,6 +87,33 @@ export class LLMProviderFactory {
             case 'anthropic':
                 if (!config.apiKey) {
                     throw new Error('Anthropic API key is required');
+                }
+                break;
+            case 'openai':
+                if (!config.apiKey) {
+                    throw new Error('OpenAI API key is required');
+                }
+                if (!config.apiKey.startsWith('sk-')) {
+                    throw new Error('Invalid OpenAI API key format');
+                }
+                break;
+            case 'bedrock':
+                if (!config.accessKeyId) {
+                    throw new Error('AWS Access Key ID is required for Bedrock');
+                }
+                if (!config.secretAccessKey) {
+                    throw new Error('AWS Secret Access Key is required for Bedrock');
+                }
+                if (!config.accessKeyId.match(/^AKIA[0-9A-Z]{16}$/) && !config.accessKeyId.match(/^ASIA[0-9A-Z]{16}$/)) {
+                    throw new Error('Invalid AWS Access Key format for Bedrock');
+                }
+                break;
+            case 'gemini':
+                if (!config.apiKey) {
+                    throw new Error('Google AI API key is required for Gemini');
+                }
+                if (!config.apiKey.startsWith('AIza')) {
+                    throw new Error('Invalid Google AI API key format for Gemini');
                 }
                 break;
             default:

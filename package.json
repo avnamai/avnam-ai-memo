@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Chrome extension for saving and analyzing webpage content",
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.18.0"
+    "@anthropic-ai/sdk": "^0.18.0",
+    "@aws-sdk/client-bedrock-runtime": "^3.540.0"
   },
   "devDependencies": {
     "esbuild": "^0.20.1"

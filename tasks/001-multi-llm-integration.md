@@ -39,26 +39,26 @@ Refactor the current Anthropic-only implementation to support multiple LLM provi
 
 ### Phase 2: Provider Implementations
 
-- [ ] **001-4:** Implement OpenAI Provider
-  - [ ] Create `providers/openai-provider.js` extending `LLMProvider`
-  - [ ] Implement OpenAI API calls with browser-compatible fetch
-  - [ ] Map OpenAI responses to unified interface format
-  - [ ] Add model configuration (GPT-4, GPT-3.5-turbo options)
-  - [ ] Implement proper error handling and rate limiting
+- [x] **001-4:** Implement OpenAI Provider
+  - [x] Create `providers/openai-provider.js` extending `LLMProvider`
+  - [x] Implement OpenAI API calls with browser-compatible fetch
+  - [x] Map OpenAI responses to unified interface format
+  - [x] Add model configuration (GPT-4, GPT-3.5-turbo options)
+  - [x] Implement proper error handling and rate limiting
 
-- [ ] **001-5:** Implement AWS Bedrock Provider
-  - [ ] Create `providers/bedrock-provider.js` extending `LLMProvider`
-  - [ ] Research and implement Bedrock API authentication for browser environment
-  - [ ] Support Claude models via Bedrock (if feasible in browser)
-  - [ ] Handle AWS-specific error responses and rate limiting
-  - [ ] Add region configuration support
+- [x] **001-5:** Implement AWS Bedrock Provider
+  - [x] Create `providers/bedrock-provider.js` extending `LLMProvider`
+  - [x] Research and implement Bedrock API authentication for browser environment
+  - [x] Support Claude models via Bedrock using AWS SDK v3
+  - [x] Handle AWS-specific error responses and rate limiting
+  - [x] Add region configuration support
 
-- [ ] **001-6:** Implement Google Gemini Provider  
-  - [ ] Create `providers/gemini-provider.js` extending `LLMProvider`
-  - [ ] Implement Google AI API calls for Gemini models
-  - [ ] Handle Gemini-specific request/response formats
-  - [ ] Support multiple Gemini model variants (Gemini Pro, etc.)
-  - [ ] Implement safety settings and configuration options
+- [x] **001-6:** Implement Google Gemini Provider  
+  - [x] Create `providers/gemini-provider.js` extending `LLMProvider`
+  - [x] Implement Google AI API calls for Gemini models
+  - [x] Handle Gemini-specific request/response formats
+  - [x] Support multiple Gemini model variants (Gemini Pro, etc.)
+  - [x] Implement safety settings and configuration options
 
 ### Phase 3: User Interface Integration
 
