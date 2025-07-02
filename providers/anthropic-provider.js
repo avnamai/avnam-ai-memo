@@ -91,12 +91,22 @@ export class AnthropicProvider extends LLMProvider {
         const chatMessages = messages.filter(m => m.role !== 'system');
 
         try {
+            // Filter out only API-specific options to avoid potential issues
+            const apiOptions = {};
+            const allowedOptions = ['temperature', 'top_p', 'top_k', 'stream', 'stop_sequences'];
+            
+            allowedOptions.forEach(key => {
+                if (options[key] !== undefined) {
+                    apiOptions[key] = options[key];
+                }
+            });
+
             const response = await this.client.messages({
                 model: options.model || this.model,
                 max_tokens: options.max_tokens || 4096,
                 system: systemMessage,
                 messages: chatMessages,
-                ...options
+                ...apiOptions
             });
 
             return {

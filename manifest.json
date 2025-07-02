@@ -46,7 +46,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["content.js"],
+      "resources": ["content.js", "dist/aws-sdk-bundle.js"],
       "matches": ["<all_urls>"]
     }
   ]

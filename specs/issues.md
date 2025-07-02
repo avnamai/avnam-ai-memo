@@ -1,5 +1,19 @@
 # Issues
 
+[x] When testing connection for Bedrock I get error: Connection test failed: Failed to load AWS SDK: Failed to resolve module specifier '@aws-sdk/client-bedrock-runtime'. Make sure @aws-sdk/client-bedrock-runtime is installed.
+
+[x] Next to the title "Avnam AI Memo" provide a tiny font model provider indicator like (using Gemini)
+
+[x] Test connection returns really fast. Are you actually testing an LLM call for testing connection?
+
+[x] When in Bedrock settings missing an option for using cross-region inference and prefix model ids with `us.` if selected.
+
+[x] When selecting Gemini model and capturing memo I see processing notification but saved memo does not show up. I get Error processing memo: Error: Failed to parse Gemini response as JSON.
+
+[x] When I select Settings, then select Memos, I still see settings screen below Memos screen. It hides when I click on any other menu like tags and come back to memos.
+
+[x] Error processing memo: Error: Unrecognized request arguments supplied: tags, url
+
 [x] When saving AWS credentials after selecting Bedrock provider in settings I get Invalid Configuration error.
 
 [x] Ensure the model ids drop down in choosing Bedrock provider are matching https://docs.aws.amazon.com/bedrock/latest/userguide/models-supported.html. Use Claude Opus 4, Sonnet 4, Sonnet 3.7, Sonnet 3.5v2, and Haiku 3.5. Provide an option for using cross-region inference and prefix model ids with `.us` if selected.

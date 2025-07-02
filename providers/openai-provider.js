@@ -30,26 +30,46 @@ export class OpenAIProvider extends LLMProvider {
     }
 
     async testConnection() {
-        const response = await fetch(`${this.baseUrl}/models`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${this.apiKey}`,
-                'Content-Type': 'application/json'
+        // Test connection with actual LLM call to ensure full pipeline works
+        try {
+            const testMessages = [{ role: 'user', content: 'Hi' }];
+            const response = await this.chat(testMessages, { 
+                max_tokens: 10,  // Minimal tokens to reduce cost
+                temperature: 0   // Deterministic response
+            });
+            
+            if (response.success && response.reply) {
+                return { status: 'connected', model: this.model };
+            } else {
+                throw new Error('Invalid response from OpenAI API');
             }
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.error?.message || `HTTP ${response.status}`);
+        } catch (error) {
+            if (error.message.includes('rate limit')) {
+                throw new Error('OpenAI API rate limit exceeded');
+            } else if (error.message.includes('insufficient_quota')) {
+                throw new Error('OpenAI API quota exceeded');
+            } else if (error.message.includes('invalid_api_key')) {
+                throw new Error('Invalid OpenAI API key');
+            } else {
+                throw new Error(`OpenAI connection test failed: ${error.message}`);
+            }
         }
-
-        return await response.json();
     }
 
     async chat(messages, options = {}) {
         if (!this.initialized) {
             throw new Error('Provider not initialized. Call initialize() first.');
         }
+
+        // Filter out only API-specific options to avoid "unrecognized arguments" errors
+        const apiOptions = {};
+        const allowedOptions = ['temperature', 'max_tokens', 'top_p', 'frequency_penalty', 'presence_penalty', 'stop', 'stream', 'logit_bias'];
+        
+        allowedOptions.forEach(key => {
+            if (options[key] !== undefined) {
+                apiOptions[key] = options[key];
+            }
+        });
 
         const requestBody = {
             model: options.model || this.model,
@@ -59,7 +79,7 @@ export class OpenAIProvider extends LLMProvider {
             })),
             max_tokens: options.max_tokens || 4096,
             temperature: options.temperature || 0.7,
-            ...options
+            ...apiOptions
         };
 
         try {

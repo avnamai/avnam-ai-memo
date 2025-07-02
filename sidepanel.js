@@ -133,6 +133,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Hide other panels
         document.getElementById('tagsPanel').classList.add('hidden');
         document.getElementById('chatPanel').classList.add('hidden');
+        document.getElementById('settingsPanel').classList.add('hidden');
         
         // If in detail view, go back to list
         memoDetailView.classList.add('hidden');
@@ -255,6 +256,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Initialize provider settings
     await initializeProviderSettings();
+    
+    // Update provider indicator in title
+    await updateProviderIndicator();
 
     async function initializeProviderSettings() {
         try {
@@ -271,7 +275,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
 
             // Check for legacy configuration and migrate if needed
-            await providerConfigManager.migrateFromLegacy();
+            const migrated = await providerConfigManager.migrateFromLegacy();
 
             // Load current configuration
             const currentConfig = await providerConfigManager.getCurrentConfig();
@@ -339,7 +343,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     async function populateProviderFields(config) {
-        const { type, apiKey, accessKeyId, secretAccessKey, region, model } = config;
+        const { type, apiKey, accessKeyId, secretAccessKey, region, model, useCrossRegionInference } = config;
         
         // Populate API key fields
         switch (type) {
@@ -353,6 +357,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 document.getElementById('bedrockAccessKey').value = accessKeyId || '';
                 document.getElementById('bedrockSecretKey').value = secretAccessKey || '';
                 document.getElementById('bedrockRegion').value = region || 'us-east-1';
+                document.getElementById('bedrockCrossRegion').checked = useCrossRegionInference || false;
                 break;
             case 'gemini':
                 document.getElementById('geminiKey').value = apiKey || '';
@@ -362,6 +367,49 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Set model selection
         if (model) {
             document.getElementById('modelSelect').value = model;
+        }
+    }
+
+    // Update provider indicator in HTML title and UI
+    async function updateProviderIndicator() {
+        try {
+            const currentConfig = await providerConfigManager.getCurrentConfig();
+            const baseTitle = 'Avnam AI Memo';
+            const providerIndicatorElement = document.getElementById('providerIndicator');
+            
+            if (currentConfig && currentConfig.type) {
+                // Map provider types to display names
+                const providerNames = {
+                    'anthropic': 'Claude',
+                    'openai': 'GPT',
+                    'bedrock': 'Bedrock',
+                    'gemini': 'Gemini'
+                };
+                
+                const providerName = providerNames[currentConfig.type] || currentConfig.type;
+                document.title = `${baseTitle} | ${providerName}`;
+                
+                // Update the UI element
+                if (providerIndicatorElement) {
+                    providerIndicatorElement.textContent = `(using ${providerName})`;
+                }
+            } else {
+                document.title = baseTitle;
+                
+                // Update the UI element
+                if (providerIndicatorElement) {
+                    providerIndicatorElement.textContent = '(no provider configured)';
+                }
+            }
+        } catch (error) {
+            console.error('Failed to update provider indicator:', error);
+            document.title = 'Avnam AI Memo';
+            
+            // Update the UI element with error state
+            const providerIndicatorElement = document.getElementById('providerIndicator');
+            if (providerIndicatorElement) {
+                providerIndicatorElement.textContent = '(provider unknown)';
+            }
         }
     }
 
@@ -385,6 +433,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 action: 'setLLMConfig',
                 config: config
             });
+
+            // Update provider indicator in title
+            await updateProviderIndicator();
 
             showStatus('success', 'Settings saved successfully');
         } catch (error) {
@@ -453,6 +504,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const accessKeyId = document.getElementById('bedrockAccessKey').value.trim();
                 const secretKey = document.getElementById('bedrockSecretKey').value.trim();
                 const region = document.getElementById('bedrockRegion').value;
+                const useCrossRegion = document.getElementById('bedrockCrossRegion').checked;
                 
                 if (!accessKeyId || !secretKey) {
                     showStatus('error', 'AWS credentials are required for Bedrock');
@@ -462,6 +514,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 config.accessKeyId = accessKeyId;
                 config.secretAccessKey = secretKey;
                 config.region = region;
+                config.useCrossRegionInference = useCrossRegion;
                 break;
 
             case 'gemini':

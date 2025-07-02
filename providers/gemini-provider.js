@@ -30,19 +30,30 @@ export class GeminiProvider extends LLMProvider {
     }
 
     async testConnection() {
-        const response = await fetch(`${this.baseUrl}/models?key=${this.apiKey}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
+        // Test connection with actual LLM call to ensure full pipeline works
+        try {
+            const testMessages = [{ role: 'user', content: 'Hi' }];
+            const response = await this.chat(testMessages, { 
+                max_tokens: 10,    // Minimal tokens to reduce cost
+                temperature: 0     // Deterministic response
+            });
+            
+            if (response.success && response.reply) {
+                return { status: 'connected', model: this.model };
+            } else {
+                throw new Error('Invalid response from Gemini API');
             }
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.error?.message || `HTTP ${response.status}`);
+        } catch (error) {
+            if (error.message.includes('PERMISSION_DENIED')) {
+                throw new Error('Invalid Gemini API key or insufficient permissions');
+            } else if (error.message.includes('QUOTA_EXCEEDED')) {
+                throw new Error('Gemini API quota exceeded');
+            } else if (error.message.includes('RATE_LIMIT_EXCEEDED')) {
+                throw new Error('Gemini API rate limit exceeded');
+            } else {
+                throw new Error(`Gemini connection test failed: ${error.message}`);
+            }
         }
-
-        return await response.json();
     }
 
     async chat(messages, options = {}) {
@@ -53,14 +64,17 @@ export class GeminiProvider extends LLMProvider {
         // Convert messages to Gemini format
         const contents = this.formatMessagesForGemini(messages);
 
+        // Filter out only API-specific options to avoid issues with extra arguments
+        const generationConfig = {
+            temperature: options.temperature || 0.7,
+            maxOutputTokens: options.max_tokens || 4096,
+            topP: options.topP || 0.8,
+            topK: options.topK || 40
+        };
+
         const requestBody = {
             contents: contents,
-            generationConfig: {
-                temperature: options.temperature || 0.7,
-                maxOutputTokens: options.max_tokens || 4096,
-                topP: options.topP || 0.8,
-                topK: options.topK || 40
-            },
+            generationConfig: generationConfig,
             safetySettings: options.safetySettings || this.getDefaultSafetySettings()
         };
 
@@ -145,9 +159,32 @@ ${sanitizedContent}`;
 
             let parsedResponse;
             try {
+                // First try to parse as-is
                 parsedResponse = JSON.parse(response.reply);
             } catch (parseError) {
-                throw new Error('Failed to parse Gemini response as JSON');
+                // Try to extract JSON from markdown code blocks or other formatting
+                try {
+                    let jsonText = response.reply;
+                    
+                    // Remove markdown code blocks if present
+                    const jsonBlockMatch = jsonText.match(/```(?:json)?\s*([\s\S]*?)```/);
+                    if (jsonBlockMatch) {
+                        jsonText = jsonBlockMatch[1];
+                    }
+                    
+                    // Try to find JSON object boundaries
+                    const openBrace = jsonText.indexOf('{');
+                    const closeBrace = jsonText.lastIndexOf('}');
+                    
+                    if (openBrace !== -1 && closeBrace !== -1 && closeBrace > openBrace) {
+                        jsonText = jsonText.substring(openBrace, closeBrace + 1);
+                    }
+                    
+                    parsedResponse = JSON.parse(jsonText.trim());
+                } catch (secondParseError) {
+                    console.error('Gemini response:', response.reply);
+                    throw new Error(`Failed to parse Gemini response as JSON. Response: ${response.reply.substring(0, 200)}...`);
+                }
             }
 
             // Validate required fields

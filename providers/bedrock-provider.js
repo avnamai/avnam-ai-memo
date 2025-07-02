@@ -91,13 +91,13 @@ export class BedrockProvider extends LLMProvider {
             this.region = region;
         }
 
-        // Dynamically import AWS SDK modules
+        // Dynamically import AWS SDK modules from bundled file
         try {
-            const awsModule = await import('@aws-sdk/client-bedrock-runtime');
+            const awsModule = await import('/dist/aws-sdk-bundle.js');
             BedrockRuntimeClient = awsModule.BedrockRuntimeClient;
             InvokeModelCommand = awsModule.InvokeModelCommand;
         } catch (error) {
-            throw new Error(`Failed to load AWS SDK: ${error.message}. Make sure @aws-sdk/client-bedrock-runtime is installed.`);
+            throw new Error(`Failed to load AWS SDK: ${error.message}. Make sure the AWS SDK bundle is built.`);
         }
 
         // Create Bedrock Runtime client
