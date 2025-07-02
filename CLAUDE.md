@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Avnam AI Memo is a Chrome extension that enables users to capture, organize, and chat with web content using AI. The extension uses Anthropic's Claude API for content processing and natural language interactions.
+Avnam AI Memo is a Chrome extension that enables users to capture, organize, and chat with web content using AI. The extension supports multiple LLM providers (Anthropic Claude, OpenAI GPT, Google Gemini) for content processing and natural language interactions.
 
 ## Common Development Commands
 
@@ -22,8 +22,9 @@ Avnam AI Memo is a Chrome extension that enables users to capture, organize, and
 
 ### Development Notes
 - Only background.js is currently bundled; other files are loaded as ES modules
-- The extension requires an Anthropic API key to function
+- The extension requires an API key from one of the supported providers (Anthropic, OpenAI, or Google)
 - Uses Chrome Manifest V3 with service worker architecture
+- Multi-provider architecture allows switching between different AI models
 
 ## Architecture Overview
 
@@ -55,11 +56,13 @@ Avnam AI Memo is a Chrome extension that enables users to capture, organize, and
 
 ### Key Modules
 
-**Anthropic API Integration** (`anthropic-api.js`)
-- Browser-compatible Claude API client
-- Content processing with structured data extraction
+**Multi-LLM Provider Integration** (`providers/`, `llm-provider-factory.js`)
+- Browser-compatible API clients for multiple providers (Anthropic, OpenAI, Gemini)
+- Unified provider interface with standardized request/response handling
+- Content processing with structured data extraction across all providers
 - Chat message handling and context management
-- Token counting and cost estimation
+- Provider-specific token counting and cost estimation
+- Configuration management and provider switching
 
 **Content Processing** (`memos.js`)
 - Memo loading and filtering functionality
@@ -110,7 +113,10 @@ Avnam AI Memo is a Chrome extension that enables users to capture, organize, and
 The extension uses strict CSP settings defined in manifest.json:
 - `script-src 'self'` - Only allows scripts from extension
 - `object-src 'self'` - Restricts object sources
-- Connects to `https://api.anthropic.com/*` for AI processing
+- Connects to multiple AI provider endpoints:
+  - `https://api.anthropic.com/*` for Anthropic Claude
+  - `https://api.openai.com/*` for OpenAI GPT
+  - `https://generativelanguage.googleapis.com/*` for Google Gemini
 - Supports `<all_urls>` for content capture
 
 ## File Organization
@@ -122,7 +128,12 @@ The extension uses strict CSP settings defined in manifest.json:
 - `content.js` - Web page content injection
 
 ### Feature Modules
-- `anthropic-api.js` - AI integration
+- `providers/` - Multi-LLM provider implementations
+  - `anthropic-provider.js` - Anthropic Claude integration
+  - `openai-provider.js` - OpenAI GPT integration  
+  - `gemini-provider.js` - Google Gemini integration
+- `llm-provider-factory.js` - Provider factory and management
+- `config/provider-config.js` - Provider configuration management
 - `memos.js` - Content management
 - `tags.js` - Organization system
 - `ui.js` - Interface components
@@ -159,10 +170,12 @@ The extension uses strict CSP settings defined in manifest.json:
 ## Important Implementation Details
 
 ### API Integration
-- Uses custom browser-compatible Anthropic client (not official SDK in browser context)
-- Implements retry logic and rate limiting
-- Handles token counting and content truncation
-- Supports both memo processing and chat interactions
+- Uses custom browser-compatible clients for multiple providers (not official SDKs in browser context)
+- Unified provider interface with factory pattern for easy provider switching
+- Implements retry logic and rate limiting across all providers
+- Handles provider-specific token counting and content truncation
+- Supports both memo processing and chat interactions with all providers
+- Provider-specific error handling and authentication validation
 
 ### Security Considerations
 - API keys stored securely in Chrome storage
@@ -185,12 +198,46 @@ The extension uses strict CSP settings defined in manifest.json:
 - `tabs` - Tab management
 - Host permissions for `api.anthropic.com` and `<all_urls>`
 
+## Multi-LLM Provider Setup
+
+### Supported Providers
+
+**Anthropic Claude**
+- API Key Format: `sk-ant-...`
+- Supported Models: Claude Opus 4, Sonnet 4, Sonnet 3.7, Sonnet 3.5v2, Haiku 3.5
+- Get API Key: https://console.anthropic.com/
+
+**OpenAI GPT**
+- API Key Format: `sk-...`
+- Supported Models: GPT-4o-mini, GPT-4o, GPT-4.1, GPT-4.1-mini
+- Get API Key: https://platform.openai.com/api-keys
+
+**Google Gemini**
+- API Key Format: `AIza...`
+- Supported Models: Gemini 2.5 Pro, Gemini 2.5 Flash
+- Get API Key: https://aistudio.google.com/app/apikey
+
+### Configuration
+1. Open the extension side panel
+2. Click the Settings button
+3. Select your preferred AI provider from the dropdown
+4. Enter your API key for the selected provider
+5. Choose your preferred model
+6. Click "Test Connection" to verify setup
+7. Click "Save Settings"
+
+### Provider Switching
+- Users can switch between providers at any time from Settings
+- Existing memos work with any provider
+- Chat conversations maintain context when switching providers
+- Each provider has optimized token counting and processing
+
 ## Dependencies
 
 ### Production
-- `@anthropic-ai/sdk` (v0.18.0) - AI integration
+- `@anthropic-ai/sdk` (v0.18.0) - AI integration (used for reference, not in browser)
 
-### Development
+### Development  
 - `esbuild` (v0.20.1) - JavaScript bundling
 
-The extension is designed to be lightweight with minimal external dependencies and browser-compatible ES modules.
+The extension is designed to be lightweight with minimal external dependencies and browser-compatible ES modules. All provider integrations use native fetch API for maximum compatibility.
