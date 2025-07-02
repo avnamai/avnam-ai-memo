@@ -1,5 +1,7 @@
 import { LLMProvider } from '../llm-provider-api.js';
-import { BedrockRuntimeClient, InvokeModelCommand } from '@aws-sdk/client-bedrock-runtime';
+
+// Dynamic imports for AWS SDK to avoid browser module resolution issues
+let BedrockRuntimeClient, InvokeModelCommand;
 
 export class BedrockProvider extends LLMProvider {
     constructor(config = {}) {
@@ -86,6 +88,15 @@ export class BedrockProvider extends LLMProvider {
         
         if (region) {
             this.region = region;
+        }
+
+        // Dynamically import AWS SDK modules
+        try {
+            const awsModule = await import('@aws-sdk/client-bedrock-runtime');
+            BedrockRuntimeClient = awsModule.BedrockRuntimeClient;
+            InvokeModelCommand = awsModule.InvokeModelCommand;
+        } catch (error) {
+            throw new Error(`Failed to load AWS SDK: ${error.message}. Make sure @aws-sdk/client-bedrock-runtime is installed.`);
         }
 
         // Create Bedrock Runtime client
