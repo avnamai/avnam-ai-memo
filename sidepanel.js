@@ -82,7 +82,7 @@ async function sendMessage() {
         console.error('Chat error:', error);
         addChatMessage('assistant', 'I apologize, but I encountered an error. Please try again.');
         if (error.message.includes('API key not set')) {
-            checkApiKey();
+            checkProviderConfiguration();
         }
     } finally {
         // Hide typing indicator
@@ -279,7 +279,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (currentConfig) {
                 // Set provider selection
                 providerSelect.value = currentConfig.type;
-                await showProviderConfig(currentConfig.type);
+                await showProviderConfig(currentConfig.type, currentConfig.model);
                 
                 // Populate fields with current values
                 await populateProviderFields(currentConfig);
@@ -300,7 +300,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    async function showProviderConfig(providerType) {
+    async function showProviderConfig(providerType, selectedModel = null) {
         // Hide all provider configs
         const configs = ['anthropicConfig', 'openaiConfig', 'bedrockConfig', 'geminiConfig'];
         configs.forEach(configId => {
@@ -339,6 +339,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 option.textContent = model;
                 modelSelect.appendChild(option);
             });
+
+            // Set the selected model if provided
+            if (selectedModel && provider.models.includes(selectedModel)) {
+                modelSelect.value = selectedModel;
+            }
         }
     }
 
@@ -364,10 +369,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 break;
         }
 
-        // Set model selection
-        if (model) {
-            document.getElementById('modelSelect').value = model;
-        }
+        // Model selection is now handled in showProviderConfig function
     }
 
     // Update provider indicator in HTML title and UI
@@ -569,36 +571,25 @@ chrome.runtime.onMessage.addListener((message) => {
         showStatus('error', message.error);
         resetMemoButton();
         if (message.error.includes('API key not set')) {
-            checkApiKey();
+            checkProviderConfiguration();
         }
     } else if (message.action === 'savingMemo') {
         showStatus('processing', 'Extracting content with AI');
     }
 });
 
-// Check and prompt for API key
-async function checkApiKey() {
+// Check if any provider is configured
+async function checkProviderConfiguration() {
     try {
-        const result = await chrome.storage.sync.get(['anthropicApiKey']);
-        if (!result.anthropicApiKey) {
-            const apiKey = prompt('Please enter your Anthropic API key to enable memo processing:');
-            if (apiKey) {
-                await chrome.storage.sync.set({ anthropicApiKey: apiKey });
-                await chrome.runtime.sendMessage({
-                    action: 'setApiKey',
-                    apiKey
-                });
-                showStatus('api', 'API key saved');
-                return true;
-            } else {
-                showStatus('error', 'API key is required');
-                return false;
-            }
+        const isConfigured = await providerConfigManager.isConfigured();
+        if (!isConfigured) {
+            showStatus('error', 'Please configure an AI provider in Settings first');
+            return false;
         }
         return true;
     } catch (error) {
-        console.error('Error checking API key:', error);
-        showStatus('error', 'Failed to check API key');
+        console.error('Error checking provider configuration:', error);
+        showStatus('error', 'Failed to check provider configuration');
         return false;
     }
 }
@@ -632,21 +623,14 @@ async function initializeExtension() {
             }
         }
 
-        // Set API key in form if available
-        if (result.anthropicApiKey) {
-            document.getElementById('anthropicKey').value = result.anthropicApiKey;
-            await chrome.runtime.sendMessage({
-                action: 'setApiKey',
-                apiKey: result.anthropicApiKey
-            });
-        }
+        // Legacy API key handling removed - using new provider configuration system
 
         // Initialize other components
         await initializeTags();
         loadMemos();
         
         // Check API key after initialization
-        await checkApiKey();
+        await checkProviderConfiguration();
 
         // Backup metadata to sync storage
         await backupData();
@@ -680,11 +664,9 @@ function resetMemoButton() {
 memoButton.addEventListener('click', async () => {
     if (memoButton.disabled) return;
     
-    // Check for API key before enabling highlight mode
-    const result = await chrome.storage.local.get(['anthropicApiKey']);
-    if (!result.anthropicApiKey) {
-        showStatus('error', 'Please set your API key first');
-        checkApiKey();
+    // Check for provider configuration before enabling highlight mode
+    const isConfigured = await checkProviderConfiguration();
+    if (!isConfigured) {
         return;
     }
 
@@ -812,8 +794,8 @@ async function initializeChatTags() {
 // Select a tag for chat
 async function selectChatTag(tag) {
     // Check API key first
-    const hasApiKey = await checkApiKey();
-    if (!hasApiKey) {
+    const isConfigured = await checkProviderConfiguration();
+    if (!isConfigured) {
         return; // Don't proceed if API key is not set
     }
 

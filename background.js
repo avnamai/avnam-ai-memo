@@ -14,9 +14,24 @@ class ProviderManager {
 
         try {
             this.currentProvider = LLMProviderFactory.createProvider(config.type, config);
-            if (config.apiKey) {
-                await this.currentProvider.initialize(config.apiKey);
+            
+            // Handle different initialization patterns for different providers
+            switch (config.type) {
+                case 'bedrock':
+                    await this.currentProvider.initialize({
+                        accessKeyId: config.accessKeyId,
+                        secretAccessKey: config.secretAccessKey,
+                        sessionToken: config.sessionToken,
+                        region: config.region
+                    });
+                    break;
+                default:
+                    if (config.apiKey) {
+                        await this.currentProvider.initialize(config.apiKey);
+                    }
+                    break;
             }
+            
             this.initialized = this.currentProvider.initialized;
             return true;
         } catch (error) {
