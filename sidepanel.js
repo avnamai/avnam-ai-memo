@@ -256,9 +256,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Initialize provider settings
     await initializeProviderSettings();
-    
-    // Update provider indicator in title
-    await updateProviderIndicator();
 
     async function initializeProviderSettings() {
         try {
@@ -293,6 +290,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const selectedProvider = e.target.value;
                 await showProviderConfig(selectedProvider);
             });
+
+            // Update provider indicator after migration and config loading
+            await updateProviderIndicator();
 
         } catch (error) {
             console.error('Failed to initialize provider settings:', error);
@@ -387,18 +387,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                 };
                 
                 const providerName = providerNames[currentConfig.type] || currentConfig.type;
-                document.title = `${baseTitle} | ${providerName}`;
+                document.title = baseTitle; // Keep simple title since provider is shown in UI
                 
                 // Update the UI element
                 if (providerIndicatorElement) {
-                    providerIndicatorElement.textContent = `(using ${providerName})`;
+                    providerIndicatorElement.textContent = `Using ${providerName}`;
                 }
             } else {
                 document.title = baseTitle;
                 
                 // Update the UI element
                 if (providerIndicatorElement) {
-                    providerIndicatorElement.textContent = '(no provider configured)';
+                    providerIndicatorElement.textContent = 'No provider configured';
                 }
             }
         } catch (error) {
@@ -408,7 +408,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Update the UI element with error state
             const providerIndicatorElement = document.getElementById('providerIndicator');
             if (providerIndicatorElement) {
-                providerIndicatorElement.textContent = '(provider unknown)';
+                providerIndicatorElement.textContent = 'Provider unknown';
             }
         }
     }

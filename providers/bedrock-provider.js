@@ -10,7 +10,7 @@ export class BedrockProvider extends LLMProvider {
         this.secretAccessKey = null;
         this.sessionToken = null;
         this.region = config.region || 'us-east-1';
-        this.model = config.model || 'anthropic.claude-sonnet-4-20250514-v1:0';
+        this.model = config.model || 'anthropic.claude-3-5-sonnet-20241022-v2:0';
         this.useCrossRegionInference = config.useCrossRegionInference || false;
         this.client = null;
     }
@@ -121,6 +121,15 @@ export class BedrockProvider extends LLMProvider {
         }
     }
 
+    // Get the correct model ID based on cross-region inference setting
+    getModelId(modelOverride = null) {
+        const baseModel = modelOverride || this.model;
+        if (this.useCrossRegionInference && !baseModel.startsWith('us.')) {
+            return baseModel.replace('anthropic.', 'us.anthropic.');
+        }
+        return baseModel;
+    }
+
     async testConnection() {
         if (!this.client) {
             throw new Error('Bedrock client not initialized');
@@ -135,7 +144,7 @@ export class BedrockProvider extends LLMProvider {
             };
 
             const command = new InvokeModelCommand({
-                modelId: this.model,
+                modelId: this.getModelId(),
                 contentType: 'application/json',
                 accept: 'application/json',
                 body: JSON.stringify(testPayload)
@@ -150,7 +159,7 @@ export class BedrockProvider extends LLMProvider {
             if (error.name === 'AccessDeniedError') {
                 throw new Error('AWS credentials do not have permission to access Bedrock');
             } else if (error.name === 'ValidationException') {
-                throw new Error('Invalid model ID or request format');
+                throw new Error(`Invalid model ID or request format. Model: ${this.model}, Region: ${this.region}. Error: ${error.message}`);
             } else if (error.name === 'ServiceUnavailableException') {
                 throw new Error('Bedrock service is currently unavailable');
             } else {
@@ -179,7 +188,7 @@ export class BedrockProvider extends LLMProvider {
 
         try {
             const command = new InvokeModelCommand({
-                modelId: options.model || this.model,
+                modelId: this.getModelId(options.model),
                 contentType: 'application/json',
                 accept: 'application/json',
                 body: JSON.stringify(requestBody)

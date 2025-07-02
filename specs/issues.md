@@ -1,5 +1,17 @@
 # Issues
 
+[x] Remove the Title "Anvam AI Memo" and model provider indicator from toolbar. Instead provide only model provider just below the toolbar right aligned using text like - Using Gemini.
+
+[x] On loading the sidepanel for first time and setting Anthropic key, the model provider shows "no provider configured"
+
+[x] Test connection on OpenAI settings gives error - Connection test failed: OpenAI API authentication failed: OpenAI connection test failed: Provider not initialized. Call initialize() first.
+
+[x] Update OpenAI models selection using https://platform.openai.com/docs/models and use o4-mini, gpt-4o, gpt-4.1, gpt-4.1-mini
+
+[x] When testing Bedrock connection I get error - Connection test failed: Failed to initialize Bedrock client: Invalid model ID or request format
+
+[x] When testing Genini connection I get error - Connection test failed: Google AI API authentication failed: Gemini connection test failed: Provider not initialized. Call initialize() first.
+
 [x] When testing connection for Bedrock I get error: Connection test failed: Failed to load AWS SDK: Failed to resolve module specifier '@aws-sdk/client-bedrock-runtime'. Make sure @aws-sdk/client-bedrock-runtime is installed.
 
 [x] Next to the title "Avnam AI Memo" provide a tiny font model provider indicator like (using Gemini)

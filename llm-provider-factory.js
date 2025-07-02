@@ -42,10 +42,10 @@ export class LLMProviderFactory {
                 description: 'GPT models by OpenAI',
                 requiresApiKey: true,
                 models: [
-                    'gpt-4',
-                    'gpt-4-turbo-preview',
-                    'gpt-3.5-turbo',
-                    'gpt-3.5-turbo-16k'
+                    'o4-mini',
+                    'gpt-4o',
+                    'gpt-4.1',
+                    'gpt-4.1-mini'
                 ]
             },
             {

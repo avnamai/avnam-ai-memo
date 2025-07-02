@@ -18,11 +18,11 @@ export class OpenAIProvider extends LLMProvider {
         }
 
         this.apiKey = apiKey;
+        this.initialized = true;
         
         // Test connection by listing models
         try {
             await this.testConnection();
-            this.initialized = true;
             return true;
         } catch (error) {
             throw new Error(`OpenAI API authentication failed: ${error.message}`);
@@ -30,6 +30,11 @@ export class OpenAIProvider extends LLMProvider {
     }
 
     async testConnection() {
+        // Check if provider is initialized first
+        if (!this.apiKey) {
+            throw new Error('Provider not initialized. Call initialize() first.');
+        }
+
         // Test connection with actual LLM call to ensure full pipeline works
         try {
             const testMessages = [{ role: 'user', content: 'Hi' }];
