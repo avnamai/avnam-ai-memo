@@ -8,7 +8,7 @@
   [![Multi-LLM Support](https://img.shields.io/badge/Multi--LLM-Support-7C3AED?style=for-the-badge)](https://github.com/anthropics/claude-code)
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
   
-  **Choose Your AI**: Claude 🤖 | GPT 🧠 | Gemini 🎯 | Bedrock ☁️
+  **Choose Your AI**: Claude 🤖 | GPT 🧠 | Gemini 🎯
   
   [🚀 Quick Start](#-quick-start) • [✨ Features](#-features) • [📖 User Guide](#-user-guide) • [🗺️ Roadmap](#️-roadmap) • [🤝 Contributing](#-contributing)
   
@@ -125,11 +125,6 @@ npm run build
 <td><a href="https://platform.openai.com/api-keys">platform.openai.com</a></td>
 </tr>
 <tr>
-<td>☁️ <b>AWS Bedrock</b></td>
-<td>Enterprise, AWS integration</td>
-<td><a href="https://aws.amazon.com/bedrock/">aws.amazon.com/bedrock</a></td>
-</tr>
-<tr>
 <td>🎯 <b>Google Gemini</b></td>
 <td>Multimodal content, Google ecosystem</td>
 <td><a href="https://aistudio.google.com/">aistudio.google.com</a></td>
@@ -225,9 +220,6 @@ Each AI provider has specific settings you can customize:
 - Models: GPT-4, GPT-3.5 Turbo
 - Best for: Creative tasks, code generation
 
-**AWS Bedrock**
-- Region selection for optimal performance
-- Enterprise-grade security and compliance
 
 **Google Gemini**
 - Models: Gemini 2.5 Pro, Gemini 1.5 Pro

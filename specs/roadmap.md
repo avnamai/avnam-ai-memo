@@ -116,7 +116,7 @@ This roadmap is ordered from top to bottom by priority of development.
    - API gateway
    - Rate limiting
 
-[x] Multi-LLM Integration (Phase 1-2): Foundation refactoring and provider implementations completed - provider base class, factory pattern, and configuration management system implemented. Anthropic provider refactored to use new architecture. OpenAI, AWS Bedrock (using AWS SDK v3), and Google Gemini providers fully implemented and integrated.
+[x] Multi-LLM Integration (Phase 1-2): Foundation refactoring and provider implementations completed - provider base class, factory pattern, and configuration management system implemented. Anthropic provider refactored to use new architecture. OpenAI and Google Gemini providers fully implemented and integrated.
 
 [ ] Local LLM Integration: Enable users to choose Ollama as a model provider.
 

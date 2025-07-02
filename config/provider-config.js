@@ -306,20 +306,8 @@ export class ProviderConfigManager {
         try {
             const provider = LLMProviderFactory.createProvider(config.type, config);
             
-            // Handle different initialization patterns for different providers
-            switch (config.type) {
-                case 'bedrock':
-                    await provider.initialize({
-                        accessKeyId: config.accessKeyId,
-                        secretAccessKey: config.secretAccessKey,
-                        sessionToken: config.sessionToken,
-                        region: config.region
-                    });
-                    break;
-                default:
-                    await provider.initialize(config.apiKey);
-                    break;
-            }
+            // Initialize provider with API key
+            await provider.initialize(config.apiKey);
             
             return { success: true, message: 'Connection successful' };
         } catch (error) {

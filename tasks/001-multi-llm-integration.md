@@ -1,7 +1,7 @@
 # Task Set 001: Multi-LLM Integration
 
 **Priority:** High  
-**Roadmap Item:** Multi-LLM Integration - Enable users to choose between Bedrock, OpenAI, Google Gemini, Anthropic as model provider
+**Roadmap Item:** Multi-LLM Integration - Enable users to choose between OpenAI, Google Gemini, Anthropic as model provider
 
 ## Overview
 
@@ -46,12 +46,6 @@ Refactor the current Anthropic-only implementation to support multiple LLM provi
   - [x] Add model configuration (GPT-4, GPT-3.5-turbo options)
   - [x] Implement proper error handling and rate limiting
 
-- [x] **001-5:** Implement AWS Bedrock Provider
-  - [x] Create `providers/bedrock-provider.js` extending `LLMProvider`
-  - [x] Research and implement Bedrock API authentication for browser environment
-  - [x] Support Claude models via Bedrock using AWS SDK v3
-  - [x] Handle AWS-specific error responses and rate limiting
-  - [x] Add region configuration support
 
 - [x] **001-6:** Implement Google Gemini Provider  
   - [x] Create `providers/gemini-provider.js` extending `LLMProvider`
@@ -130,7 +124,6 @@ Refactor the current Anthropic-only implementation to support multiple LLM provi
 ### New Files
 - `providers/anthropic-provider.js`
 - `providers/openai-provider.js`
-- `providers/bedrock-provider.js`
 - `providers/gemini-provider.js`
 - `config/provider-config.js`
 

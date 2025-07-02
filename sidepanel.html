@@ -450,58 +450,6 @@
                         </div>
                     </div>
 
-                    <!-- Bedrock Configuration -->
-                    <div id="bedrockConfig" class="hidden space-y-2">
-                        <label for="bedrockAccessKey" class="block text-sm font-medium text-gray-700">
-                            AWS Access Key ID
-                        </label>
-                        <div class="relative">
-                            <input type="password" 
-                                   id="bedrockAccessKey" 
-                                   class="block w-full pr-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm" 
-                                   placeholder="AKIA...">
-                            <button class="toggle-visibility absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
-                                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                                    <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
-                                </svg>
-                            </button>
-                        </div>
-                        <label for="bedrockSecretKey" class="block text-sm font-medium text-gray-700">
-                            AWS Secret Access Key
-                        </label>
-                        <div class="relative">
-                            <input type="password" 
-                                   id="bedrockSecretKey" 
-                                   class="block w-full pr-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm" 
-                                   placeholder="Enter your AWS Secret Access Key">
-                            <button class="toggle-visibility absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
-                                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                                    <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
-                                </svg>
-                            </button>
-                        </div>
-                        <label for="bedrockRegion" class="block text-sm font-medium text-gray-700">
-                            AWS Region
-                        </label>
-                        <select id="bedrockRegion" 
-                                class="block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
-                            <option value="us-east-1">us-east-1</option>
-                            <option value="us-west-2">us-west-2</option>
-                            <option value="eu-west-1">eu-west-1</option>
-                            <option value="eu-central-1">eu-central-1</option>
-                        </select>
-                        
-                        <div class="mt-4">
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="bedrockCrossRegion" class="sr-only">
-                                <span class="toggle-slider"></span>
-                                <span class="ml-3 text-sm font-medium text-gray-700">Use Cross-Region Inference</span>
-                            </label>
-                            <p class="text-xs text-gray-500 mt-1">Enable cross-region inference for improved model availability. Model IDs will be prefixed with 'us.' when enabled.</p>
-                        </div>
-                    </div>
 
                     <!-- Gemini Configuration -->
                     <div id="geminiConfig" class="hidden space-y-2">

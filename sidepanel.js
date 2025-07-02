@@ -305,7 +305,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function showProviderConfig(providerType, selectedModel = null) {
         // Hide all provider configs
-        const configs = ['anthropicConfig', 'openaiConfig', 'bedrockConfig', 'geminiConfig'];
+        const configs = ['anthropicConfig', 'openaiConfig', 'geminiConfig'];
         configs.forEach(configId => {
             document.getElementById(configId).classList.add('hidden');
         });
@@ -318,8 +318,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Show relevant config
         const configMap = {
             'anthropic': 'anthropicConfig',
-            'openai': 'openaiConfig', 
-            'bedrock': 'bedrockConfig',
+            'openai': 'openaiConfig',
             'gemini': 'geminiConfig'
         };
 
@@ -361,12 +360,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             case 'openai':
                 document.getElementById('openaiKey').value = apiKey || '';
                 break;
-            case 'bedrock':
-                document.getElementById('bedrockAccessKey').value = accessKeyId || '';
-                document.getElementById('bedrockSecretKey').value = secretAccessKey || '';
-                document.getElementById('bedrockRegion').value = region || 'us-east-1';
-                document.getElementById('bedrockCrossRegion').checked = useCrossRegionInference || false;
-                break;
             case 'gemini':
                 document.getElementById('geminiKey').value = apiKey || '';
                 break;
@@ -387,7 +380,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const providerNames = {
                     'anthropic': 'Claude',
                     'openai': 'GPT',
-                    'bedrock': 'Bedrock',
                     'gemini': 'Gemini'
                 };
                 
@@ -505,22 +497,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 config.apiKey = openaiKey;
                 break;
 
-            case 'bedrock':
-                const accessKeyId = document.getElementById('bedrockAccessKey').value.trim();
-                const secretKey = document.getElementById('bedrockSecretKey').value.trim();
-                const region = document.getElementById('bedrockRegion').value;
-                const useCrossRegion = document.getElementById('bedrockCrossRegion').checked;
-                
-                if (!accessKeyId || !secretKey) {
-                    showStatus('error', 'AWS credentials are required for Bedrock');
-                    return null;
-                }
-                
-                config.accessKeyId = accessKeyId;
-                config.secretAccessKey = secretKey;
-                config.region = region;
-                config.useCrossRegionInference = useCrossRegion;
-                break;
 
             case 'gemini':
                 const geminiKey = document.getElementById('geminiKey').value.trim();
