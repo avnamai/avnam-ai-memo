@@ -3,10 +3,14 @@
 > Transform your web browsing into an intelligent knowledge base with AI-powered content capture and chat
 
 [![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-4285F4?style=flat-square&logo=google-chrome&logoColor=white)](https://chrome.google.com/webstore)
-[![Anthropic Claude](https://img.shields.io/badge/Powered%20by-Claude%20AI-FF6B35?style=flat-square)](https://anthropic.com)
+[![Multi-LLM Support](https://img.shields.io/badge/Multi--LLM-Support-7C3AED?style=flat-square)](https://github.com/anthropics/claude-code)
 [![Manifest V3](https://img.shields.io/badge/Manifest-V3-34A853?style=flat-square)](https://developer.chrome.com/docs/extensions/mv3/)
+[![Anthropic Claude](https://img.shields.io/badge/Anthropic-Claude-FF6B35?style=flat-square)](https://anthropic.com)
+[![OpenAI GPT](https://img.shields.io/badge/OpenAI-GPT-00A67E?style=flat-square)](https://openai.com)
+[![AWS Bedrock](https://img.shields.io/badge/AWS-Bedrock-FF9900?style=flat-square)](https://aws.amazon.com/bedrock)
+[![Google Gemini](https://img.shields.io/badge/Google-Gemini-4285F4?style=flat-square)](https://ai.google.com/gemini)
 
-Avnam AI Memo is a Chrome extension that revolutionizes how you interact with web content. Capture any web content, organize it intelligently with AI-powered tags, and have natural conversations with your collected knowledge.
+**Avnam AI Memo** is the first Chrome extension to offer **multi-LLM support** for intelligent web content management. Choose from **Anthropic Claude**, **OpenAI GPT**, **AWS Bedrock**, or **Google Gemini** to capture, organize, and chat with your web content exactly how you prefer.
 
 ---
 
@@ -14,6 +18,13 @@ Avnam AI Memo is a Chrome extension that revolutionizes how you interact with we
 
 ![Avnam AI Memo in Action](images/web-memo-workflow.png)
 *See Avnam AI Memo in action: capture, organize, and chat with your web content*
+
+### 🚀 **Multi-LLM AI Support** ⭐ *Industry First*
+- **Choose your AI**: Select from Anthropic Claude, OpenAI GPT, AWS Bedrock, or Google Gemini
+- **Provider switching**: Change AI providers without losing your data
+- **Optimized performance**: Each provider optimized for specific use cases
+- **Unified interface**: Consistent experience across all AI providers
+- **Cost flexibility**: Use the most cost-effective provider for your needs
 
 ### 🎯 **Smart Content Capture**
 - **One-click capture**: Highlight and save any content from web pages
@@ -64,9 +75,42 @@ Avnam AI Memo is a Chrome extension that revolutionizes how you interact with we
 
 ### Setup
 
-1. **API Key**: Get your [Anthropic API key](https://console.anthropic.com/) 
-2. **Configuration**: Enter your API key in the extension settings
-3. **Ready to go**: Start capturing content and chatting with AI!
+1. **Choose your AI provider**: Select from 4 supported providers
+   - **Anthropic Claude**: Get your key at [console.anthropic.com](https://console.anthropic.com/)
+   - **OpenAI GPT**: Get your key at [platform.openai.com](https://platform.openai.com/api-keys)
+   - **AWS Bedrock**: Configure AWS credentials and Bedrock access
+   - **Google Gemini**: Get your key at [aistudio.google.com](https://aistudio.google.com/)
+
+2. **Configuration**: Open the extension settings and:
+   - Select your preferred AI provider
+   - Enter your API key
+   - Choose your preferred model (optional)
+
+3. **Ready to go**: Start capturing content and chatting with your chosen AI!
+
+---
+
+## 🆚 Why Choose Avnam AI Memo?
+
+### **vs. Other Web Clippers**
+
+| Feature | Avnam AI Memo | Traditional Clippers | Other AI Clippers |
+|---------|---------------|---------------------|-------------------|
+| **AI Provider Choice** | ✅ 4 Providers (Claude, GPT, Bedrock, Gemini) | ❌ None | ⚠️ Single Provider |
+| **Intelligent Tagging** | ✅ AI-powered with 70+ categories | ❌ Manual only | ⚠️ Limited categories |
+| **Context-Aware Chat** | ✅ Chat with filtered memo collections | ❌ No chat | ⚠️ Basic chat |
+| **Cross-Origin Support** | ✅ Works on any website | ⚠️ Limited sites | ⚠️ Limited sites |
+| **Local-First Privacy** | ✅ Data stays local, optional sync | ❌ Cloud-dependent | ⚠️ Varies |
+| **Citation System** | ✅ AI responses link to source memos | ❌ No citations | ❌ No citations |
+| **Cost Flexibility** | ✅ Choose cheapest provider for your needs | ❌ N/A | ❌ Locked to one provider |
+
+### **Unique Advantages**
+
+- **🚀 Industry-First Multi-LLM Support**: No other Chrome extension offers choice between 4 major AI providers
+- **💰 Cost Optimization**: Switch to the most cost-effective AI provider for your usage patterns
+- **🔄 Provider Flexibility**: Test different AI models for different tasks without losing your data
+- **🧠 Context Intelligence**: AI understands your project organization for better responses
+- **🔒 Privacy-First**: Your content stays local unless you choose to sync
 
 ---
 
@@ -90,12 +134,25 @@ Avnam AI Memo is a Chrome extension that revolutionizes how you interact with we
 - **Tag management**: Edit, merge, or delete tags from the settings
 - **Filtering**: Use tags to filter memos and chat context
 
+### AI Provider Selection
+
+1. **Open Settings**: Click the extension icon and go to Settings
+2. **Choose Provider**: Select from the dropdown:
+   - **Anthropic Claude**: Best for analysis and reasoning
+   - **OpenAI GPT**: Great for creative tasks and code
+   - **AWS Bedrock**: Enterprise-grade with Claude via AWS
+   - **Google Gemini**: Excellent for multimodal content
+3. **Configure**: Enter your API key and select model
+4. **Test Connection**: Verify your setup works
+5. **Switch Anytime**: Change providers without losing data
+
 ### AI Chat Features
 
 1. **Filter context**: Select tags to focus your conversation
 2. **Ask questions**: Query your knowledge base naturally
 3. **Get citations**: AI responses reference specific memos
 4. **Export chats**: Save conversations for future reference
+5. **Compare AI responses**: Try different providers for the same query
 
 ### Data Management
 
@@ -115,12 +172,24 @@ Avnam AI Memo is a Chrome extension that revolutionizes how you interact with we
 - **Side Panel Interface**: Primary user interface for memo and chat management
 - **Storage System**: Chrome storage.local/sync for data persistence
 
-### AI Integration
+### Multi-LLM Architecture
 
-- **Anthropic Claude API**: Powers content processing and chat functionality
-- **Token optimization**: Efficient content chunking for API limits
+- **Provider Factory Pattern**: Unified interface for all AI providers
+- **LLM Provider Base Class**: Common interface implementation for consistent behavior
+- **Provider-Specific Implementations**:
+  - **Anthropic Provider**: Claude 3.5 Sonnet, Claude 3 Haiku
+  - **OpenAI Provider**: GPT-4, GPT-3.5 Turbo
+  - **AWS Bedrock Provider**: Claude via AWS infrastructure
+  - **Google Gemini Provider**: Gemini Pro, Gemini Pro Vision
+- **Configuration Management**: Secure multi-provider API key storage
+- **Dynamic Provider Switching**: Change providers without data loss
+
+### AI Integration Features
+
+- **Token optimization**: Efficient content chunking for API limits across all providers
 - **Structured extraction**: Automatic title, summary, and metadata generation
-- **Cost tracking**: Built-in token counting and usage estimation
+- **Cost tracking**: Built-in token counting and usage estimation per provider
+- **Provider-specific optimizations**: Leverages unique capabilities of each AI model
 
 ### Security & Privacy
 
@@ -133,25 +202,35 @@ Avnam AI Memo is a Chrome extension that revolutionizes how you interact with we
 
 ## 🗺️ Roadmap
 
-### 🎯 **v1.1 - Enhanced Intelligence** *(Q3 2024)*
+### ✅ **v1.0 - Foundation Complete**
+- [x] **Multi-LLM Support**: Anthropic Claude, OpenAI GPT, AWS Bedrock, Google Gemini
+- [x] **Smart Content Capture**: One-click web content extraction
+- [x] **AI-Powered Organization**: 70+ category tags with intelligent suggestions
+- [x] **Context-Aware Chat**: Conversational AI with memo citations
+- [x] **Local-First Storage**: Chrome storage with cross-device sync
+- [x] **Provider Factory Architecture**: Modular, extensible AI provider system
+
+### 🎯 **v1.1 - Enhanced Intelligence** *(Q1 2025)*
+- [ ] **Local LLM Integration**: Ollama support for private AI processing
 - [ ] **Advanced search**: Semantic search across memo content
 - [ ] **Smart summaries**: AI-generated daily/weekly content digests  
 - [ ] **Related content**: Automatic linking of similar memos
 - [ ] **Bulk operations**: Mass tagging and memo management
 
-### 🎯 **v1.2 - Collaboration Features** *(Q4 2024)*
+### 🎯 **v1.2 - Rich Media Support** *(Q2 2025)*
+- [ ] **Visual content**: OCR and image analysis capabilities
+- [ ] **YouTube integration**: Direct video transcript capture and processing
+- [ ] **PDF processing**: Import and analyze document content
+- [ ] **Audio content**: Podcast and audio file processing
+- [ ] **Extended formats**: Markdown, social media threads, and more
+
+### 🎯 **v1.3 - Collaboration Features** *(Q3 2025)*
 - [ ] **Shared collections**: Collaborate on memo collections
 - [ ] **Team workspaces**: Multi-user organization features
 - [ ] **Export formats**: PDF, Markdown, and presentation exports
-- [ ] **Integration APIs**: Connect with note-taking apps
+- [ ] **Integration APIs**: Connect with Obsidian, Notion, and other tools
 
-### 🎯 **v1.3 - Advanced AI** *(Q1 2025)*
-- [ ] **Multiple AI providers**: Support for OpenAI, Google, and other LLMs
-- [ ] **Custom prompts**: User-defined processing templates
-- [ ] **Auto-research**: AI-powered content enrichment
-- [ ] **Visual content**: OCR and image analysis capabilities
-
-### 🎯 **v1.4 - Ecosystem Integration** *(Q2 2025)*
+### 🎯 **v1.4 - Ecosystem Integration** *(Q4 2025)*
 - [ ] **Browser sync**: Firefox and Safari extensions
 - [ ] **Mobile app**: iOS and Android companion apps
 - [ ] **Desktop app**: Standalone application for power users
@@ -175,14 +254,49 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 # Clone the repository
 git clone https://github.com/yourusername/avnam-ai-memo.git
 
-# Install dependencies
+# Install dependencies (includes multi-LLM support)
 npm install
+# Dependencies include:
+# - @anthropic-ai/sdk for Claude integration
+# - @aws-sdk/client-bedrock-runtime for AWS Bedrock
+# - Native fetch for OpenAI and Gemini (no extra deps needed)
 
 # Build the extension
 npm run build
 
 # Load in Chrome for testing
 # Follow the installation instructions above
+```
+
+### Provider-Specific Setup
+
+#### 🤖 **Anthropic Claude**
+```bash
+# Get API key at console.anthropic.com
+# Supports: Claude 3.5 Sonnet, Claude 3 Haiku
+# Best for: Complex reasoning, analysis, coding
+```
+
+#### 🧠 **OpenAI GPT**
+```bash
+# Get API key at platform.openai.com/api-keys
+# Supports: GPT-4, GPT-3.5 Turbo
+# Best for: Creative writing, code generation, general tasks
+```
+
+#### ☁️ **AWS Bedrock**
+```bash
+# Configure AWS credentials
+# Requires: AWS account with Bedrock access
+# Supports: Claude models via AWS infrastructure
+# Best for: Enterprise environments, AWS integration
+```
+
+#### 🎯 **Google Gemini**
+```bash
+# Get API key at aistudio.google.com
+# Supports: Gemini Pro, Gemini Pro Vision
+# Best for: Multimodal content, Google ecosystem
 ```
 
 ### Testing
