@@ -1,1 +1,1 @@
-Add all changes to git. Commit changes to remote repo.
+Add all changes to git. Commit changes and push to remote repo.

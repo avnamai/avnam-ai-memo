@@ -1,4 +1,4 @@
-# 🧠 Avanam AI Memo
+# 🧠 Avnam AI Memo
 
 > Transform your web browsing into an intelligent knowledge base with AI-powered content capture and chat
 
@@ -6,14 +6,14 @@
 [![Anthropic Claude](https://img.shields.io/badge/Powered%20by-Claude%20AI-FF6B35?style=flat-square)](https://anthropic.com)
 [![Manifest V3](https://img.shields.io/badge/Manifest-V3-34A853?style=flat-square)](https://developer.chrome.com/docs/extensions/mv3/)
 
-Avanam AI Memo is a Chrome extension that revolutionizes how you interact with web content. Capture any web content, organize it intelligently with AI-powered tags, and have natural conversations with your collected knowledge.
+Avnam AI Memo is a Chrome extension that revolutionizes how you interact with web content. Capture any web content, organize it intelligently with AI-powered tags, and have natural conversations with your collected knowledge.
 
 ---
 
 ## ✨ Features
 
-![Avanam AI Memo in Action](images/web-memo-workflow.png)
-*See Avanam AI Memo in action: capture, organize, and chat with your web content*
+![Avnam AI Memo in Action](images/web-memo-workflow.png)
+*See Avnam AI Memo in action: capture, organize, and chat with your web content*
 
 ### 🎯 **Smart Content Capture**
 - **One-click capture**: Highlight and save any content from web pages
@@ -72,7 +72,7 @@ Avanam AI Memo is a Chrome extension that revolutionizes how you interact with w
 
 ## 📖 User Guide
 
-![Avanam AI Memo Workflow](images/web-memo-workflow.png)
+![Avnam AI Memo Workflow](images/web-memo-workflow.png)
 *Complete workflow: From content capture to AI-powered organization and chat*
 
 ### Capturing Content
@@ -173,7 +173,7 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/avanam-ai-memo.git
+git clone https://github.com/yourusername/avnam-ai-memo.git
 
 # Install dependencies
 npm install
@@ -213,16 +213,16 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- **Issues**: [GitHub Issues](https://github.com/yourusername/avanam-ai-memo/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/avanam-ai-memo/discussions)
-- **Email**: support@avanam.ai
+- **Issues**: [GitHub Issues](https://github.com/yourusername/avnam-ai-memo/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/yourusername/avnam-ai-memo/discussions)
+- **Email**: support@avnam.ai
 
 ---
 
 <div align="center">
 
-**⭐ Star this repo if Avanam AI Memo helps your productivity!**
+**⭐ Star this repo if Avnam AI Memo helps your productivity!**
 
-Made with ❤️ by the Avanam team
+Made with ❤️ by the Avnam team
 
 </div>

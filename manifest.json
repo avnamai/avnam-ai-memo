@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Web Memo",
+  "name": "Avnam AI Memo",
   "version": "1.0",
   "description": "Capture, self-organize, and chat with content as you browse the web",
   "permissions": [
@@ -18,7 +18,7 @@
     "extension_pages": "script-src 'self'; object-src 'self'"
   },
   "action": {
-    "default_title": "Web Memo",
+    "default_title": "Avnam AI Memo",
     "default_icon": {
       "16": "icons/webmemo-logo-16.png",
       "48": "icons/webmemo-logo-48.png",

@@ -1,9 +1,9 @@
 // Check if script is already initialized
-if (!window.webMemoInitialized) {
-    window.webMemoInitialized = true;
+if (!window.avnamMemoInitialized) {
+    window.avnamMemoInitialized = true;
     
     // Initialize global state
-    window.webMemo = {
+    window.avnamMemo = {
         isHighlightMode: false,
         highlightedElement: null
     };
@@ -36,20 +36,20 @@ if (!window.webMemoInitialized) {
             }
         `;
         document.head.appendChild(style);
-        console.log('Web Memo content script initialized');
+        console.log('Avnam AI Memo content script initialized');
     }
 
     // Listen for messages from the side panel
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         console.log('Received message:', request);
         if (request.action === 'toggleHighlightMode') {
-            window.webMemo.isHighlightMode = request.enabled;
-            document.body.style.cursor = window.webMemo.isHighlightMode ? 'crosshair' : 'default';
+            window.avnamMemo.isHighlightMode = request.enabled;
+            document.body.style.cursor = window.avnamMemo.isHighlightMode ? 'crosshair' : 'default';
             
             // Clear any existing highlights when exiting highlight mode
-            if (!window.webMemo.isHighlightMode && window.webMemo.highlightedElement) {
-                window.webMemo.highlightedElement.classList.remove('highlight-outline');
-                window.webMemo.highlightedElement = null;
+            if (!window.avnamMemo.isHighlightMode && window.avnamMemo.highlightedElement) {
+                window.avnamMemo.highlightedElement.classList.remove('highlight-outline');
+                window.avnamMemo.highlightedElement = null;
             }
             
             sendResponse({ success: true });
@@ -58,25 +58,25 @@ if (!window.webMemoInitialized) {
 
     // Add mouseover effect for elements
     document.addEventListener('mouseover', (e) => {
-        if (!window.webMemo.isHighlightMode) return;
+        if (!window.avnamMemo.isHighlightMode) return;
         
-        if (window.webMemo.highlightedElement) {
-            window.webMemo.highlightedElement.classList.remove('highlight-outline');
+        if (window.avnamMemo.highlightedElement) {
+            window.avnamMemo.highlightedElement.classList.remove('highlight-outline');
         }
         
-        window.webMemo.highlightedElement = e.target;
+        window.avnamMemo.highlightedElement = e.target;
         e.target.classList.add('highlight-outline');
         e.stopPropagation();
     });
 
     document.addEventListener('mouseout', (e) => {
-        if (!window.webMemo.isHighlightMode || !window.webMemo.highlightedElement) return;
-        window.webMemo.highlightedElement.classList.remove('highlight-outline');
+        if (!window.avnamMemo.isHighlightMode || !window.avnamMemo.highlightedElement) return;
+        window.avnamMemo.highlightedElement.classList.remove('highlight-outline');
     });
 
     // Handle click on highlighted element
     document.addEventListener('click', (e) => {
-        if (!window.webMemo.isHighlightMode) return;
+        if (!window.avnamMemo.isHighlightMode) return;
         
         e.preventDefault();
         e.stopPropagation();
@@ -85,9 +85,9 @@ if (!window.webMemoInitialized) {
         console.log('Selected element:', element);
         
         // Remove hover outline
-        if (window.webMemo.highlightedElement) {
-            window.webMemo.highlightedElement.classList.remove('highlight-outline');
-            window.webMemo.highlightedElement = null;
+        if (window.avnamMemo.highlightedElement) {
+            window.avnamMemo.highlightedElement.classList.remove('highlight-outline');
+            window.avnamMemo.highlightedElement = null;
         }
         
         // Clone the element to strip inline styles and scripts
@@ -167,12 +167,12 @@ if (!window.webMemoInitialized) {
             
             if (response.success) {
                 // Reset highlight mode and remove selection effect
-                window.webMemo.isHighlightMode = false;
+                window.avnamMemo.isHighlightMode = false;
                 document.body.style.cursor = 'default';
                 
-                if (window.webMemo.highlightedElement) {
-                    window.webMemo.highlightedElement.classList.remove('highlight-outline');
-                    window.webMemo.highlightedElement = null;
+                if (window.avnamMemo.highlightedElement) {
+                    window.avnamMemo.highlightedElement.classList.remove('highlight-outline');
+                    window.avnamMemo.highlightedElement = null;
                 }
             } else {
                 console.error('Failed to process memo:', response.error || 'Unknown error');
@@ -184,5 +184,5 @@ if (!window.webMemoInitialized) {
     // Initialize the content script
     initialize();
 } else {
-    console.log('Web Memo content script already initialized');
+    console.log('Avnam AI Memo content script already initialized');
 } 
