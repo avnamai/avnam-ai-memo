@@ -61,7 +61,7 @@ export class GeminiProvider extends LLMProvider {
             // If models list succeeds, do a minimal content generation test
             const testMessages = [{ role: 'user', content: 'Test' }];
             const chatResponse = await this.chat(testMessages, { 
-                max_tokens: 10,
+                max_tokens: 50,
                 temperature: 0
             });
             

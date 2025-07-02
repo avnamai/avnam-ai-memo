@@ -93,7 +93,9 @@ export class BedrockProvider extends LLMProvider {
 
         // Dynamically import AWS SDK modules from bundled file
         try {
-            const awsModule = await import('/dist/aws-sdk-bundle.js');
+            // Use Chrome runtime URL for proper module resolution in ServiceWorker
+            const bundleUrl = chrome.runtime.getURL('dist/aws-sdk-bundle.js');
+            const awsModule = await import(bundleUrl);
             BedrockRuntimeClient = awsModule.BedrockRuntimeClient;
             InvokeModelCommand = awsModule.InvokeModelCommand;
         } catch (error) {
