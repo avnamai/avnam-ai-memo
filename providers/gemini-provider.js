@@ -5,7 +5,7 @@ export class GeminiProvider extends LLMProvider {
         super(config);
         this.apiKey = null;
         this.baseUrl = config.baseUrl || 'https://generativelanguage.googleapis.com/v1';
-        this.model = config.model || 'gemini-pro';
+        this.model = config.model || 'gemini-2.5-pro';
     }
 
     async initialize(apiKey) {
@@ -139,7 +139,7 @@ ${sanitizedContent}`;
         try {
             const response = await this.chat(messages, {
                 temperature: 0.3, // Lower temperature for more consistent structured output
-                model: 'gemini-pro', // Use standard model for text processing
+                model: 'gemini-2.5-flash', // Use efficient model for text processing
                 ...options
             });
 
@@ -193,10 +193,12 @@ ${sanitizedContent}`;
 
     getAvailableModels() {
         return [
-            'gemini-pro',
-            'gemini-pro-vision',
+            'gemini-2.5-pro',
+            'gemini-2.5-flash',
             'gemini-1.5-pro',
-            'gemini-1.5-flash'
+            'gemini-1.5-flash',
+            'gemini-pro',
+            'gemini-pro-vision'
         ];
     }
 

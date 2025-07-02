@@ -113,7 +113,7 @@ async function testProviderConfigManager() {
         
         // Test 10: Model update
         console.log('\n10. Testing model update...');
-        await configManager.updateModel('claude-3-haiku-20240307');
+        await configManager.updateModel('claude-3-5-haiku-20241022');
         const modelUpdatedConfig = await configManager.getCurrentConfig();
         console.log(`   - Model updated to: ${modelUpdatedConfig.model}`);
         

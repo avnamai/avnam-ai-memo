@@ -18,7 +18,7 @@ class AnthropicClient {
                 'anthropic-dangerous-direct-browser-access': 'true'
             },
             body: JSON.stringify({
-                model: options.model || "claude-3-5-sonnet-20241022",
+                model: options.model || "claude-sonnet-4-20250514",
                 max_tokens: options.max_tokens || 4096,
                 system: options.system,
                 messages: options.messages
@@ -45,7 +45,7 @@ export class AnthropicProvider extends LLMProvider {
         this.apiKey = null;
         this.client = null;
         this.baseUrl = 'https://api.anthropic.com/v1';
-        this.model = config.model || 'claude-3-5-sonnet-20241022';
+        this.model = config.model || 'claude-sonnet-4-20250514';
     }
 
     async initialize(apiKey) {
@@ -168,9 +168,11 @@ export class AnthropicProvider extends LLMProvider {
     // Get available models
     getAvailableModels() {
         return [
+            'claude-opus-4-20250514',
+            'claude-sonnet-4-20250514',
+            'claude-3-7-sonnet-20250219',
             'claude-3-5-sonnet-20241022',
-            'claude-3-haiku-20240307',
-            'claude-3-opus-20240229'
+            'claude-3-5-haiku-20241022'
         ];
     }
 

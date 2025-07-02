@@ -3,6 +3,8 @@ import {
     loadMemos,
     filterMemosByTag
 } from './memos.js';
+import { ProviderConfigManager } from './config/provider-config.js';
+import { LLMProviderFactory } from './llm-provider-factory.js';
 import {
     predefinedTags,
     initializeTags,
@@ -93,7 +95,7 @@ async function sendMessage() {
 window.sendMessage = sendMessage;
 
 // Initialize
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     initializeExtension();
     
     // Add click handler for settings button
@@ -248,30 +250,240 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Add save settings handler
-    document.getElementById('saveSettings').addEventListener('click', async () => {
-        const settings = {
-            anthropicApiKey: document.getElementById('anthropicKey').value
+    // Initialize provider configuration manager
+    const providerConfigManager = new ProviderConfigManager();
+
+    // Initialize provider settings
+    await initializeProviderSettings();
+
+    async function initializeProviderSettings() {
+        try {
+            // Get available providers and populate dropdown
+            const availableProviders = LLMProviderFactory.getAvailableProviders();
+            const providerSelect = document.getElementById('providerSelect');
+            
+            availableProviders.forEach(provider => {
+                const option = document.createElement('option');
+                option.value = provider.id;
+                option.textContent = provider.name;
+                option.title = provider.description;
+                providerSelect.appendChild(option);
+            });
+
+            // Check for legacy configuration and migrate if needed
+            await providerConfigManager.migrateFromLegacy();
+
+            // Load current configuration
+            const currentConfig = await providerConfigManager.getCurrentConfig();
+            if (currentConfig) {
+                // Set provider selection
+                providerSelect.value = currentConfig.type;
+                await showProviderConfig(currentConfig.type);
+                
+                // Populate fields with current values
+                await populateProviderFields(currentConfig);
+            }
+
+            // Add provider selection change handler
+            providerSelect.addEventListener('change', async (e) => {
+                const selectedProvider = e.target.value;
+                await showProviderConfig(selectedProvider);
+            });
+
+        } catch (error) {
+            console.error('Failed to initialize provider settings:', error);
+            showStatus('error', 'Failed to initialize provider settings');
+        }
+    }
+
+    async function showProviderConfig(providerType) {
+        // Hide all provider configs
+        const configs = ['anthropicConfig', 'openaiConfig', 'bedrockConfig', 'geminiConfig'];
+        configs.forEach(configId => {
+            document.getElementById(configId).classList.add('hidden');
+        });
+
+        // Hide model selection initially
+        document.getElementById('modelSelection').classList.add('hidden');
+
+        if (!providerType) return;
+
+        // Show relevant config
+        const configMap = {
+            'anthropic': 'anthropicConfig',
+            'openai': 'openaiConfig', 
+            'bedrock': 'bedrockConfig',
+            'gemini': 'geminiConfig'
         };
 
-        try {
-            // Save to storage
-            await saveToStorage('settings', settings);
+        const configId = configMap[providerType];
+        if (configId) {
+            document.getElementById(configId).classList.remove('hidden');
+            document.getElementById('modelSelection').classList.remove('hidden');
+        }
+
+        // Populate model dropdown
+        const providers = LLMProviderFactory.getAvailableProviders();
+        const provider = providers.find(p => p.id === providerType);
+        if (provider) {
+            const modelSelect = document.getElementById('modelSelect');
+            modelSelect.innerHTML = '';
             
-            // Update Anthropic client
-            if (settings.anthropicApiKey) {
-                await chrome.runtime.sendMessage({
-                    action: 'setApiKey',
-                    apiKey: settings.anthropicApiKey
-                });
+            provider.models.forEach(model => {
+                const option = document.createElement('option');
+                option.value = model;
+                option.textContent = model;
+                modelSelect.appendChild(option);
+            });
+        }
+    }
+
+    async function populateProviderFields(config) {
+        const { type, apiKey, accessKeyId, secretAccessKey, region, model } = config;
+        
+        // Populate API key fields
+        switch (type) {
+            case 'anthropic':
+                document.getElementById('anthropicKey').value = apiKey || '';
+                break;
+            case 'openai':
+                document.getElementById('openaiKey').value = apiKey || '';
+                break;
+            case 'bedrock':
+                document.getElementById('bedrockAccessKey').value = accessKeyId || '';
+                document.getElementById('bedrockSecretKey').value = secretAccessKey || '';
+                document.getElementById('bedrockRegion').value = region || 'us-east-1';
+                break;
+            case 'gemini':
+                document.getElementById('geminiKey').value = apiKey || '';
+                break;
+        }
+
+        // Set model selection
+        if (model) {
+            document.getElementById('modelSelect').value = model;
+        }
+    }
+
+    // Add save settings handler
+    document.getElementById('saveSettings').addEventListener('click', async () => {
+        try {
+            const providerType = document.getElementById('providerSelect').value;
+            if (!providerType) {
+                showStatus('error', 'Please select an AI provider');
+                return;
             }
+
+            const config = await gatherProviderConfig(providerType);
+            if (!config) return;
+
+            // Save configuration
+            await providerConfigManager.setConfig(config);
+            
+            // Update background script with new configuration
+            await chrome.runtime.sendMessage({
+                action: 'setLLMConfig',
+                config: config
+            });
 
             showStatus('success', 'Settings saved successfully');
         } catch (error) {
             console.error('Failed to save settings:', error);
-            showStatus('error', 'Failed to save settings');
+            showStatus('error', error.message || 'Failed to save settings');
         }
     });
+
+    // Add test connection handler
+    document.getElementById('testConnection').addEventListener('click', async () => {
+        try {
+            const providerType = document.getElementById('providerSelect').value;
+            if (!providerType) {
+                showStatus('error', 'Please select an AI provider');
+                return;
+            }
+
+            const config = await gatherProviderConfig(providerType);
+            if (!config) return;
+
+            showStatus('info', 'Testing connection...');
+            
+            const result = await providerConfigManager.testProviderConnection(config);
+            if (result.success) {
+                showStatus('success', 'Connection test successful!');
+            } else {
+                showStatus('error', `Connection test failed: ${result.message}`);
+            }
+        } catch (error) {
+            console.error('Connection test failed:', error);
+            showStatus('error', error.message || 'Connection test failed');
+        }
+    });
+
+    async function gatherProviderConfig(providerType) {
+        const model = document.getElementById('modelSelect').value;
+        let config = {
+            type: providerType,
+            model: model
+        };
+
+        switch (providerType) {
+            case 'anthropic':
+                const anthropicKey = document.getElementById('anthropicKey').value.trim();
+                if (!anthropicKey) {
+                    showStatus('error', 'Anthropic API key is required');
+                    return null;
+                }
+                config.apiKey = anthropicKey;
+                break;
+
+            case 'openai':
+                const openaiKey = document.getElementById('openaiKey').value.trim();
+                if (!openaiKey) {
+                    showStatus('error', 'OpenAI API key is required');
+                    return null;
+                }
+                if (!openaiKey.startsWith('sk-')) {
+                    showStatus('error', 'Invalid OpenAI API key format');
+                    return null;
+                }
+                config.apiKey = openaiKey;
+                break;
+
+            case 'bedrock':
+                const accessKeyId = document.getElementById('bedrockAccessKey').value.trim();
+                const secretKey = document.getElementById('bedrockSecretKey').value.trim();
+                const region = document.getElementById('bedrockRegion').value;
+                
+                if (!accessKeyId || !secretKey) {
+                    showStatus('error', 'AWS credentials are required for Bedrock');
+                    return null;
+                }
+                
+                config.accessKeyId = accessKeyId;
+                config.secretAccessKey = secretKey;
+                config.region = region;
+                break;
+
+            case 'gemini':
+                const geminiKey = document.getElementById('geminiKey').value.trim();
+                if (!geminiKey) {
+                    showStatus('error', 'Google AI API key is required');
+                    return null;
+                }
+                if (!geminiKey.startsWith('AIza')) {
+                    showStatus('error', 'Invalid Google AI API key format');
+                    return null;
+                }
+                config.apiKey = geminiKey;
+                break;
+
+            default:
+                showStatus('error', 'Unknown provider type');
+                return null;
+        }
+
+        return config;
+    }
 
     // Update chat input styling and behavior
     const chatInput = document.getElementById('chatInput');

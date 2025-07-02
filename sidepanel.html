@@ -386,12 +386,24 @@
 
             <!-- Settings Panel -->
             <div id="settingsPanel" class="hidden p-4 space-y-4">
-                <h2 class="text-lg font-semibold text-gray-800">Settings</h2>
+                <h2 class="text-lg font-semibold text-gray-800">AI Provider Settings</h2>
                 
-                <!-- API Keys Section -->
-                <div class="space-y-4">
-                    <!-- Anthropic API Key -->
-                    <div class="space-y-2">
+                <!-- Provider Selection -->
+                <div class="space-y-2">
+                    <label for="providerSelect" class="block text-sm font-medium text-gray-700">
+                        AI Provider
+                    </label>
+                    <select id="providerSelect" 
+                            class="block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
+                        <option value="">Select an AI provider...</option>
+                    </select>
+                    <p class="text-xs text-gray-500">Choose your preferred AI provider for memo processing and chat</p>
+                </div>
+
+                <!-- Provider Configuration -->
+                <div id="providerConfig" class="space-y-4">
+                    <!-- Anthropic Configuration -->
+                    <div id="anthropicConfig" class="hidden space-y-2">
                         <label for="anthropicKey" class="block text-sm font-medium text-gray-700">
                             Anthropic API Key
                         </label>
@@ -407,7 +419,99 @@
                                 </svg>
                             </button>
                         </div>
-                        <p class="text-xs text-gray-500">Required for memo processing and chat functionality</p>
+                    </div>
+
+                    <!-- OpenAI Configuration -->
+                    <div id="openaiConfig" class="hidden space-y-2">
+                        <label for="openaiKey" class="block text-sm font-medium text-gray-700">
+                            OpenAI API Key
+                        </label>
+                        <div class="relative">
+                            <input type="password" 
+                                   id="openaiKey" 
+                                   class="block w-full pr-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm" 
+                                   placeholder="sk-...">
+                            <button class="toggle-visibility absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
+                                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                                    <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Bedrock Configuration -->
+                    <div id="bedrockConfig" class="hidden space-y-2">
+                        <label for="bedrockAccessKey" class="block text-sm font-medium text-gray-700">
+                            AWS Access Key ID
+                        </label>
+                        <div class="relative">
+                            <input type="password" 
+                                   id="bedrockAccessKey" 
+                                   class="block w-full pr-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm" 
+                                   placeholder="AKIA...">
+                            <button class="toggle-visibility absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
+                                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                                    <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </div>
+                        <label for="bedrockSecretKey" class="block text-sm font-medium text-gray-700">
+                            AWS Secret Access Key
+                        </label>
+                        <div class="relative">
+                            <input type="password" 
+                                   id="bedrockSecretKey" 
+                                   class="block w-full pr-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm" 
+                                   placeholder="Enter your AWS Secret Access Key">
+                            <button class="toggle-visibility absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
+                                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                                    <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </div>
+                        <label for="bedrockRegion" class="block text-sm font-medium text-gray-700">
+                            AWS Region
+                        </label>
+                        <select id="bedrockRegion" 
+                                class="block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
+                            <option value="us-east-1">us-east-1</option>
+                            <option value="us-west-2">us-west-2</option>
+                            <option value="eu-west-1">eu-west-1</option>
+                            <option value="eu-central-1">eu-central-1</option>
+                        </select>
+                    </div>
+
+                    <!-- Gemini Configuration -->
+                    <div id="geminiConfig" class="hidden space-y-2">
+                        <label for="geminiKey" class="block text-sm font-medium text-gray-700">
+                            Google AI API Key
+                        </label>
+                        <div class="relative">
+                            <input type="password" 
+                                   id="geminiKey" 
+                                   class="block w-full pr-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm" 
+                                   placeholder="AIza...">
+                            <button class="toggle-visibility absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
+                                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                                    <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Model Selection -->
+                    <div id="modelSelection" class="hidden space-y-2">
+                        <label for="modelSelect" class="block text-sm font-medium text-gray-700">
+                            Model
+                        </label>
+                        <select id="modelSelect" 
+                                class="block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
+                        </select>
+                        <p class="text-xs text-gray-500">Choose the specific model for your selected provider</p>
                     </div>
                 </div>
 
@@ -415,6 +519,12 @@
                 <button id="saveSettings" 
                         class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                     Save Settings
+                </button>
+
+                <!-- Test Connection Button -->
+                <button id="testConnection" 
+                        class="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Test Connection
                 </button>
             </div>
 

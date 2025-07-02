@@ -29,9 +29,11 @@ export class LLMProviderFactory {
                 description: 'Claude AI by Anthropic',
                 requiresApiKey: true,
                 models: [
+                    'claude-opus-4-20250514',
+                    'claude-sonnet-4-20250514',
+                    'claude-3-7-sonnet-20250219',
                     'claude-3-5-sonnet-20241022',
-                    'claude-3-haiku-20240307',
-                    'claude-3-opus-20240229'
+                    'claude-3-5-haiku-20241022'
                 ]
             },
             {
@@ -53,17 +55,29 @@ export class LLMProviderFactory {
                 requiresApiKey: true,
                 requiresAwsCredentials: true,
                 models: [
+                    'anthropic.claude-opus-4-20250514-v1:0',
+                    'anthropic.claude-sonnet-4-20250514-v1:0',
+                    'anthropic.claude-3-7-sonnet-20250219-v1:0',
                     'anthropic.claude-3-5-sonnet-20241022-v2:0',
-                    'anthropic.claude-3-sonnet-20240229-v1:0',
-                    'anthropic.claude-3-haiku-20240307-v1:0',
-                    'anthropic.claude-3-opus-20240229-v1:0'
+                    'anthropic.claude-3-5-haiku-20241022-v1:0'
+                ],
+                crossRegionModels: [
+                    'us.anthropic.claude-opus-4-20250514-v1:0',
+                    'us.anthropic.claude-sonnet-4-20250514-v1:0',
+                    'us.anthropic.claude-3-7-sonnet-20250219-v1:0',
+                    'us.anthropic.claude-3-5-sonnet-20241022-v2:0',
+                    'us.anthropic.claude-3-5-haiku-20241022-v1:0'
                 ],
                 regions: [
                     'us-east-1',
                     'us-west-2',
                     'eu-west-1',
-                    'eu-central-1'
-                ]
+                    'eu-central-1',
+                    'ap-northeast-1',
+                    'ap-southeast-1',
+                    'ap-southeast-2'
+                ],
+                supportsCrossRegion: true
             },
             {
                 id: 'gemini',
@@ -71,10 +85,12 @@ export class LLMProviderFactory {
                 description: 'Gemini AI models by Google',
                 requiresApiKey: true,
                 models: [
-                    'gemini-pro',
-                    'gemini-pro-vision',
+                    'gemini-2.5-pro',
+                    'gemini-2.5-flash',
                     'gemini-1.5-pro',
-                    'gemini-1.5-flash'
+                    'gemini-1.5-flash',
+                    'gemini-pro',
+                    'gemini-pro-vision'
                 ],
                 supportsVision: true
             }

@@ -10,7 +10,8 @@ export class BedrockProvider extends LLMProvider {
         this.secretAccessKey = null;
         this.sessionToken = null;
         this.region = config.region || 'us-east-1';
-        this.model = config.model || 'anthropic.claude-3-5-sonnet-20241022-v2:0';
+        this.model = config.model || 'anthropic.claude-sonnet-4-20250514-v1:0';
+        this.useCrossRegionInference = config.useCrossRegionInference || false;
         this.client = null;
     }
 
@@ -281,14 +282,28 @@ Return only valid JSON without any additional text or formatting.`;
     }
 
     getAvailableModels() {
-        return [
+        const baseModels = [
+            'anthropic.claude-opus-4-20250514-v1:0',
+            'anthropic.claude-sonnet-4-20250514-v1:0',
+            'anthropic.claude-3-7-sonnet-20250219-v1:0',
             'anthropic.claude-3-5-sonnet-20241022-v2:0',
-            'anthropic.claude-3-sonnet-20240229-v1:0',
-            'anthropic.claude-3-haiku-20240307-v1:0',
-            'anthropic.claude-3-opus-20240229-v1:0',
-            'anthropic.claude-v2:1',
-            'anthropic.claude-v2',
-            'anthropic.claude-instant-v1'
+            'anthropic.claude-3-5-haiku-20241022-v1:0'
+        ];
+
+        if (this.useCrossRegionInference) {
+            return baseModels.map(model => model.replace('anthropic.', 'us.anthropic.'));
+        }
+
+        return baseModels;
+    }
+
+    getCrossRegionModels() {
+        return [
+            'us.anthropic.claude-opus-4-20250514-v1:0',
+            'us.anthropic.claude-sonnet-4-20250514-v1:0',
+            'us.anthropic.claude-3-7-sonnet-20250219-v1:0',
+            'us.anthropic.claude-3-5-sonnet-20241022-v2:0',
+            'us.anthropic.claude-3-5-haiku-20241022-v1:0'
         ];
     }
 

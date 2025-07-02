@@ -63,14 +63,17 @@ export class ProviderConfigManager {
             return false;
         }
 
-        if (!config.apiKey || typeof config.apiKey !== 'string') {
-            return false;
-        }
-
         // Validate provider type exists
         const availableProviders = this.getAvailableProviders();
         const providerExists = availableProviders.some(p => p.id === config.type);
         if (!providerExists) {
+            return false;
+        }
+
+        // Provider-specific validation
+        try {
+            LLMProviderFactory.validateConfig(config.type, config);
+        } catch (error) {
             return false;
         }
 
@@ -302,7 +305,22 @@ export class ProviderConfigManager {
     async testProviderConnection(config) {
         try {
             const provider = LLMProviderFactory.createProvider(config.type, config);
-            await provider.initialize(config.apiKey);
+            
+            // Handle different initialization patterns for different providers
+            switch (config.type) {
+                case 'bedrock':
+                    await provider.initialize({
+                        accessKeyId: config.accessKeyId,
+                        secretAccessKey: config.secretAccessKey,
+                        sessionToken: config.sessionToken,
+                        region: config.region
+                    });
+                    break;
+                default:
+                    await provider.initialize(config.apiKey);
+                    break;
+            }
+            
             return { success: true, message: 'Connection successful' };
         } catch (error) {
             return { success: false, message: error.message };
